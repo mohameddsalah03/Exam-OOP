@@ -10,12 +10,15 @@ namespace Exam_OOP
             sub01.CreateExam();
             Console.Clear();
 
-            Console.WriteLine("Do u Want To Start A Exam : [Y/N]");
-            if (char.Parse(Console.ReadLine().ToLower()) == 'y') ;
+
+            Console.WriteLine("Do u Want To Start A Exam ? : [Y/N]");
+            string input = Console.ReadLine()?.ToLower();
+            if (input == "y") 
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
                 sub01.SubjectExam.ShowExam();
+                stopwatch.Stop();
                 Console.WriteLine($"The Elapsed Time : {stopwatch.Elapsed}");
 
             }

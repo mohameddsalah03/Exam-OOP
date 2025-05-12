@@ -15,12 +15,13 @@ namespace Exam_OOP
 
         protected Exam()
         {
-
+            Questions = new List<Question>();
         }
         protected Exam(int time, int numberOfQuestions)
         {
             Time = time;
             NumberOfQuestions = numberOfQuestions;
+            Questions = new List<Question>();
         }
 
 

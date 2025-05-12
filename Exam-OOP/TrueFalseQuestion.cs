@@ -11,6 +11,12 @@ namespace Exam_OOP
         public TrueFalseQuestion(string? body, int mark, Answer[] answerList, Answer rightAnswer)
             : base(body, mark, answerList, rightAnswer)
         {
+            if (answerList.Length != 2 ||
+                answerList[0].AnswerText != "true" ||
+                answerList[1].AnswerText != "false")
+            {
+                throw new ArgumentException("TrueFalseQuestion must have exactly two answers: 'true' and 'false'.");
+            }
         }
 
         public TrueFalseQuestion()
@@ -25,20 +31,25 @@ namespace Exam_OOP
 
         public override void AddQuestion()
         {
-            Console.WriteLine("Enter The Body Of Question : ");
-            Body = Console.ReadLine();
+            Console.WriteLine("Enter The Body Of Question: ");
+            Body = Console.ReadLine() ?? string.Empty;
 
-            Console.WriteLine("Enter The Mark Of Question : ");
-            int.TryParse(Console.ReadLine(), out int mark);
+            Console.WriteLine("Enter The Mark Of Question: ");
+            int mark;
+            while (!int.TryParse(Console.ReadLine(), out mark) || mark <= 0)
+            {
+                Console.WriteLine("Invalid mark. Please enter a positive number:");
+            }
             Mark = mark;
 
-
-            Console.WriteLine("Enter The Right Answer [ 1 for True , 2 For Flase] : ");
-            int.TryParse(Console.ReadLine(), out int rAnswer);
-
-
-            RightAnswer = AnswerList.FirstOrDefault(x => x.Id == rAnswer);
-
+            Console.WriteLine("Enter The Right Answer [1 for True, 2 for False]: ");
+            int rAnswer;
+            while (!int.TryParse(Console.ReadLine(), out  rAnswer) || (rAnswer != 1 && rAnswer != 2))
+            {
+                Console.WriteLine("Invalid answer. Please select 1 for True or 2 for False:");
+            }
+            RightAnswer = AnswerList.FirstOrDefault(x => x.Id == rAnswer) 
+                ?? throw new InvalidOperationException("Right answer not found.");
 
 
         }

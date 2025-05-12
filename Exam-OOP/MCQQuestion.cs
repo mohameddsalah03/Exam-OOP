@@ -23,10 +23,14 @@ namespace Exam_OOP
         public override void AddQuestion()
         {
             Console.WriteLine("Enter The Body Of Question : ");
-            Body = Console.ReadLine();
+            Body = Console.ReadLine() ?? string.Empty;
 
             Console.WriteLine("Enter The Mark Of Question : ");
-            int.TryParse(Console.ReadLine(), out int mark);
+            int mark;
+            while(!int.TryParse(Console.ReadLine(), out mark) || mark <=0)
+            {
+                Console.WriteLine("Invalid mark. Please enter a positive number:");
+            }
             Mark = mark;
 
 
@@ -35,16 +39,21 @@ namespace Exam_OOP
             for (int i = 0; i < answers.Length; i++)
             {
                 Console.WriteLine($"Enter Choice Of Number [{i + 1}] : ");
-                answers[i] = new Answer(i + 1, Console.ReadLine());
+                answers[i] = new Answer(i + 1, Console.ReadLine() ?? string.Empty);
             }
             AnswerList = answers;
 
 
 
             Console.WriteLine("Enter The Right Answer [ 1 | 2 | 3 ] : ");
-            int.TryParse(Console.ReadLine(), out int rAnswer);
+            int rAnswer;
+            while (!int.TryParse(Console.ReadLine(), out rAnswer) || rAnswer < 1 || rAnswer > 3)
+            {
+                Console.WriteLine("Invalid answer. Please select 1, 2, or 3:");
+            }
 
-            RightAnswer = answers.FirstOrDefault(x => x.Id == rAnswer);
+            RightAnswer = answers.FirstOrDefault(x => x.Id == rAnswer) 
+                ?? throw new InvalidOperationException("Right answer not found."); 
 
         }
 

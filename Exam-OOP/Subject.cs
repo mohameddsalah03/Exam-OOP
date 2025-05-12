@@ -20,8 +20,9 @@ namespace Exam_OOP
         public Subject(int id, string name)
         {
             Id = id;
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
+
 
 
         public override string ToString()
@@ -29,46 +30,64 @@ namespace Exam_OOP
 
         public void CreateExam()
         {
-            Console.WriteLine("Enter Type Of Exam [1 for Final ,2 For Practical ] : ");
-            int.TryParse(Console.ReadLine(), out int TypeOfExam);
+            Console.WriteLine("Enter Type Of Exam [1 for Final, 2 for Practical]: ");
+            int typeOfExam;
+            while (!int.TryParse(Console.ReadLine(), out typeOfExam) || (typeOfExam != 1 && typeOfExam != 2))
+            {
+                Console.WriteLine("Invalid exam type. Please enter 1 for Final or 2 for Practical:");
+            }
 
-            Console.WriteLine("Enter Number Of Questions : ");
-            int.TryParse(Console.ReadLine(), out int numQuestions);
+            Console.WriteLine("Enter Number Of Questions: ");
+            int numQuestions;
+            while (!int.TryParse(Console.ReadLine(), out numQuestions) || numQuestions <= 0)
+            {
+                Console.WriteLine("Invalid number. Please enter a positive number:");
+            }
 
-            Console.WriteLine("Enter Time For Exam : ");
-            int.TryParse(Console.ReadLine(), out int TimeForExam);
+            Console.WriteLine("Enter Time For Exam (in minutes): ");
+            int timeForExam;
+            while (!int.TryParse(Console.ReadLine(), out timeForExam) || timeForExam <= 0)
+            {
+                Console.WriteLine("Invalid time. Please enter a positive number:");
+            }
+
 
             List<Question> questions = new List<Question>();
             for (int i = 0; i < numQuestions; i++)
             {
-                Console.Write($"Enter The Type of Question [{i + 1}] => [1 for MCQ, 2 for True/False]: ");
-                int.TryParse(Console.ReadLine(), out int questionType);
-
+                int questionType;
+         
+                if (typeOfExam == 1) // Final Exam
+                {
+                    Console.Write($"Enter The Type of Question [{i + 1}] => [1 for MCQ, 2 for True/False]: ");
+                    while (!int.TryParse(Console.ReadLine(), out questionType) || (questionType != 1 && questionType != 2))
+                    {
+                        Console.WriteLine("Invalid question type. Please enter 1 for MCQ or 2 for True/False:");
+                    }
+                }
+                else // Practical Exam
+                {
+                    Console.WriteLine($"Question [{i + 1}] is MCQ (only MCQ supported for Practical Exam).");
+                    questionType = 1; // Force MCQ for Practical Exam
+                }
 
                 if (questionType == 1)
                 {
-                    MCQQuestion mcqquestion = new MCQQuestion();
-                    mcqquestion.AddQuestion();
-                    questions.Add(mcqquestion);
+                    MCQQuestion mcqQuestion = new MCQQuestion();
+                    mcqQuestion.AddQuestion();
+                    questions.Add(mcqQuestion);
                 }
-                else if (questionType == 2)
+                else
                 {
-                    TrueFalseQuestion tFquestion = new TrueFalseQuestion();
-                    tFquestion.AddQuestion();
-                    questions.Add(tFquestion);
+                    TrueFalseQuestion tfQuestion = new TrueFalseQuestion();
+                    tfQuestion.AddQuestion();
+                    questions.Add(tfQuestion);
                 }
-
             }
 
-
-            if (TypeOfExam == 1)
-            {
-                SubjectExam = new FinalExam(questions) { Time = TimeForExam, NumberOfQuestions = numQuestions };
-            }
-            else
-            {
-                SubjectExam = new PracticalExam(questions) { Time = TimeForExam, NumberOfQuestions = numQuestions };
-            }
+            SubjectExam = typeOfExam == 1
+                ? new FinalExam(questions) { Time = timeForExam, NumberOfQuestions = numQuestions }
+                : new PracticalExam(questions) { Time = timeForExam, NumberOfQuestions = numQuestions };
 
 
         }

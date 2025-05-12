@@ -24,7 +24,7 @@ namespace Exam_OOP
         }
 
         public override string ToString()
-            => $"Answer Id : {Id} , Answer Text : {AnswerText}";
+            => $"Answer Id : {Id} , Answer Text : {AnswerText ?? "No Answer!"}";
 
 
     }

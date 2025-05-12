@@ -19,21 +19,21 @@ namespace Exam_OOP
 
         protected Question()
         {
+            AnswerList = Array.Empty<Answer>();
+
         }
 
         protected Question(string? body, int mark, Answer[] answerList, Answer rightAnswer)
         {
             Body = body;
             Mark = mark;
-            AnswerList = answerList;
-            RightAnswer = rightAnswer;
+            AnswerList = answerList ?? throw new ArgumentNullException(nameof(answerList));
+            RightAnswer = rightAnswer ?? throw new ArgumentNullException(nameof(rightAnswer));
         }
 
-        
+
 
         public abstract void AddQuestion();
-
-
 
 
     }
